@@ -117,3 +117,18 @@ module "vpc_endpoints" {
     Env     = "Production"
   }
 }
+
+module "flowlogs" {
+  source      = "./modules/flowlogs"
+  vpc_id      = module.vpc.vpc_id
+  common_tags = var.common_tags
+}
+
+module "dhcp" {
+  source               = "./modules/dhcp"
+  vpc_id               = module.vpc.vpc_id
+  domain_name          = "example.internal"
+  domain_name_servers  = ["AmazonProvidedDNS"]
+  ntp_servers          = ["169.254.169.123"]
+  common_tags          = var.common_tags
+}

@@ -21,4 +21,11 @@ variable "availability_zones" {
   default = ["ap-south-1a", "ap-south-1b"]
 }
 
-
+variable "common_tags" {
+  description = "Common tags applied to all resources"
+  type        = map(string)
+  default     = {
+    Project     = "vpc-task"
+    Environment = "dev"
+  }
+}
