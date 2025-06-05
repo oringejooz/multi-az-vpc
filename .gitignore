@@ -1,0 +1,19 @@
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+.crash
+
+# Terraform plan output
+*.tfplan
+
+# Terraform variable files
+*.tfvars
+
+# Terraform directories
+.terraform/
+
+# Override files (developer-specific)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
