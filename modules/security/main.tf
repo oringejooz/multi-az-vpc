@@ -36,14 +36,26 @@ resource "aws_network_acl" "private" {
 
 resource "aws_network_acl_rule" "private_inbound" {
   network_acl_id = aws_network_acl.private.id
-  rule_number    = 100
-  egress        = false
-  protocol      = "-1"
-  rule_action   = "allow"
-  cidr_block    = var.vpc_cidr
-  from_port     = 0
-  to_port       = 0
+  rule_number    = 210
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 1024
+  to_port        = 65535
 }
+
+resource "aws_network_acl_rule" "private_inbound_ssh" {
+  network_acl_id = aws_network_acl.private.id
+  rule_number    = 220
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = var.vpc_cidr
+  from_port      = 22
+  to_port        = 22
+}
+
 
 resource "aws_network_acl_rule" "private_outbound" {
   network_acl_id = aws_network_acl.private.id
@@ -175,6 +187,27 @@ resource "aws_security_group_rule" "app_self_ingress" {
   source_security_group_id = aws_security_group.app.id
   description              = "Allow traffic from within app security group"
 }
+
+resource "aws_security_group_rule" "web_ssh_from_bastion" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.web.id
+  source_security_group_id = aws_security_group.bastion.id
+  description              = "Allow SSH from Bastion SG"
+}
+
+resource "aws_security_group_rule" "app_ssh_from_bastion" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.app.id
+  source_security_group_id = aws_security_group.bastion.id
+  description              = "Allow SSH from Bastion SG"
+}
+
 
 resource "aws_security_group" "db" {
   name        = "db-sg"
