@@ -95,7 +95,7 @@ module "security" {
   public_subnet_ids  = module.subnets.public_subnet_ids
   private_subnet_ids = module.subnets.private_subnet_ids
   database_subnet_ids = module.subnets.database_subnet_ids
-  bastion_cidr_blocks = ["3.143.78.38/32"] # restrict accordingly
+  bastion_cidr_blocks = ["0.0.0.0/0"] # restrict accordingly
   common_tags        = {
     Project = "MultiAZ-VPC"
     Owner   = "Swarnima"
